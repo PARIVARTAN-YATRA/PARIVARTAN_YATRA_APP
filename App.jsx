@@ -7,6 +7,7 @@ import { useState } from 'react';
 import GoogleIcon from './assets/google.svg';
 import GmailIcon from './assets/gmail.svg';
 import auth from '@react-native-firebase/auth';
+import {EmailLogin} from './source/components/Email';
 
 
 function App() {
@@ -24,6 +25,12 @@ function AppContent() {
   const [text, setText] = useState('');
   const [confirm, setConfirm] = useState(null);
  const [otp, setOtp] = useState('');
+ const [showEmailLogin, setShowEmailLogin] = useState(false);
+
+if (showEmailLogin) {
+  return <EmailLogin />;
+}
+ 
 
   const sendOTP = async () => {
     try {
@@ -83,6 +90,7 @@ function AppContent() {
           </TouchableOpacity>
           <TouchableOpacity
            style={styles.button}
+           onPress={() => setShowEmailLogin(true)}
           >
              <GmailIcon width={24} height={24} style={{ marginRight: 10 }} />
             <Text style={styles.label}>Login With Email</Text>
