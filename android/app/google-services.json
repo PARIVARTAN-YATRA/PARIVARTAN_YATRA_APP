@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "154831713448",
+    "project_id": "parivartan-yatra",
+    "storage_bucket": "parivartan-yatra.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:154831713448:android:27dee6e174064856393e9d",
+        "android_client_info": {
+          "package_name": "com.parivartan_yatra"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "154831713448-gais3t3vnteti34fhcbaoa70882u1jgr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXqSAKOAV2QgLXIS8RPQC1Yv5BxQfoSZA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "154831713448-gais3t3vnteti34fhcbaoa70882u1jgr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
