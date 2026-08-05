@@ -28,7 +28,7 @@ function AppContent() {
  const [showEmailLogin, setShowEmailLogin] = useState(false);
 
 if (showEmailLogin) {
-  return <EmailLogin />;
+  return <EmailLogin onBack={() => setShowEmailLogin(false)} />;
 }
  
 
@@ -51,7 +51,7 @@ if (showEmailLogin) {
     <View style={styles.container}>
       
       <View style={styles.content}>
-        <Text style={styles.label1}>Enter your Mobile Number </Text>
+        <Text style={styles.label1}>What's your Mobile Number?</Text>
         <View style={styles.inputContainer}>
          <View style={styles.countryCodeContainer}>
                   <Text style={styles.countryCode}>+91</Text>
@@ -90,7 +90,7 @@ if (showEmailLogin) {
           </TouchableOpacity>
           <TouchableOpacity
            style={styles.button}
-           onPress={() => setShowEmailLogin(true)}
+            onPress={() => setShowEmailLogin(true)}
           >
              <GmailIcon width={24} height={24} style={{ marginRight: 10 }} />
             <Text style={styles.label}>Login With Email</Text>

@@ -1,21 +1,121 @@
 import React from 'react';
-import { View, Text,TextInput,StyleSheet , TouchableOpacity} from 'react-native';
+import { View, Text,TextInput,StyleSheet , TouchableOpacity,Alert} from 'react-native';
 import EmailIcon from '../../assets/Email.svg';
 import { useState } from 'react';
+import { BackHandler } from 'react-native';
+import { useEffect } from 'react';
+import {VerifyOtp} from './Otpverify';
 
-export const EmailLogin = () => {
+
+
+export const EmailLogin = ({ onBack }) => {
     const [text, setText] = useState('');
     const [emailError, setEmailError] = useState('');
+    const [showOtp, setShowOtp] = useState(false);
+
+
+    useEffect(() => {
+    const backAction = () => {
+      if (showOtp) {
+        setShowOtp(false);
+      } else {
+        onBack();
+      }
+      return true;
+    };
+
+    const subscription = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction
+    );
+
+    return () => subscription.remove();
+
+  }, [showOtp]);
+
+   const sendOTP = async () => {
+
+    if (!validateEmail(text.trim())) {
+      setEmailError('Please enter a valid email address');
+      return;
+    }
+
+
+    try {
+
+      const response = await fetch(
+        'http://192.168.1.66:5000/send-otp',
+        {
+          method: 'POST',
+
+          headers: {
+            'Content-Type': 'application/json',
+          },
+
+          body: JSON.stringify({
+            email: text.trim(),
+          }),
+        }
+      );
+
+
+      const data = await response.json();
+
+
+      if (data.success) {
+
+        setShowOtp(true);
+
+      } else {
+
+        Alert.alert(
+          'Error',
+          data.message || 'Failed to send OTP'
+        );
+
+      }
+
+
+    } catch (error) {
+
+      console.log(error);
+
+      Alert.alert(
+        'Error',
+        'Unable to connect to server'
+      );
+
+    }
+
+  };
 
     const validateEmail = (email) => {
       const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       return regex.test(email);
+
+       
     };
+    
+ if (showOtp) {
+    return (
+      <VerifyOtp
+        onBack={() => setShowOtp(false)}
+        email={text.trim()}
+        
+      />
+    );
+  }
     
     return (
          <View style={styles.container}> 
+         {/* <TouchableOpacity
+          onPress={onBack}
+          style={{ alignSelf: 'flex-start', margin: 20 }}
+          >
+        <Text style={{ fontSize: 18 }}>← Back</Text>
+         </TouchableOpacity> */}
          <View style={styles.content}>
-                 <Text style={styles.label1}>Enter your Email Address</Text>
+                 <Text style={styles.label1}>What's your Email Address?</Text>
             <View style={styles.inputContainer}>
                  <View style={styles.countryCodeContainer}>
                         <EmailIcon width={'80%'} height={50}   />
@@ -27,19 +127,20 @@ export const EmailLogin = () => {
                     value={text}
                     autoCapitalize="none"
                    onChangeText={(value) => {
-                                    setText(value);
-                                        if (value.length === 0) {
-                                          setEmailError('');
-                                         }
-                                          else if (!validateEmail(value)) {
-                                               setEmailError('Please enter a valid email address');
-                                            } else {
-                                                 setEmailError('');
-                                                 }
-                    }}
-                    maxLength={100}
-                  />
-                   
+                    setText(value);
+                    if (value.length === 0)
+                        {
+                            setEmailError('');
+                        }
+                        else if (!validateEmail(value))
+                            {
+                                setEmailError('Please enter a valid email address');
+                            } else {
+                                setEmailError('');
+                            }
+                        }}
+                        maxLength={100}
+                  />     
             </View>
             {emailError ? (
                         <Text style={styles.errorText}>{emailError}</Text>
@@ -48,15 +149,16 @@ export const EmailLogin = () => {
                     <TouchableOpacity
                             style={styles.button}
                             title="Send OTP"
-                           onPress={() => {
-                              if (!validateEmail(text.trim())) {
-                                  setEmailError('Please enter a valid email address');
-                                   return;
-                                    }
+                            onPress={sendOTP}
+                        //    onPress={() => {
+                        //       if (!validateEmail(text.trim())) {
+                        //           setEmailError('Please enter a valid email address');
+                        //            return;
+                        //             }
 
-                                alert('Email is valid');
-                                      // Send OTP
-                              }}
+                        //         alert('Email is valid');
+                        //               // Send OTP
+                        //       }}
                           >
                             <Text style={styles.label}>Send OTP</Text>
                     </TouchableOpacity>
